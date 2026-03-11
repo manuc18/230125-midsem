@@ -1,0 +1,132 @@
+{
+  "student_metadata": {
+    "name": "Manu Vahan",
+    "roll_number": "230125",
+    "course": "Advanced Machine Learning",
+    "exam": "Mid-Semester Examination",
+    "part": "Part B",
+    "submission_date": "2026-03-07"
+  },
+  "llm_tools_used": [
+    {
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "provider": "Anthropic"
+    }
+  ],
+  "full_llm_interaction_log": [
+    {
+      "interaction_id": 1,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.1",
+      "purpose": "Decide which two components to ablate \u2014 must be distinct, independent, and specific to the paper",
+      "prompt": "What are the two most analytically interesting components to ablate in Yang et al. NIPS 2012's Nystrom pipeline? They should be independent of each other, specific to this paper's contribution, and produce interpretable results that link back to the paper's theory.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested: (1) budget D \u2014 directly tests the convergence rate claim from Theorems 1 and 2; (2) landmark sampling strategy \u2014 directly tests the data-adaptive property that differentiates Nystrom from RFF. Both are specific to the paper and independent.",
+      "student_verification": "Confirmed both components are in the paper: budget D is the primary sweep variable in Table 1/Figure 1; landmark sampling is described as data-adaptive in Section 2.2. Both are independent: changing D does not change the sampling strategy.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 2,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.1",
+      "purpose": "Predict the expected result of Ablation 1 (budget D) before running it, to check understanding",
+      "prompt": "Before I run the budget ablation, what do Theorems 1 and 2 of Yang et al. 2012 predict about the shape of the accuracy vs D curve for Nystrom and RFF? What crossover or divergence should I expect?",
+      "llm_response_used": "Yes",
+      "how_it_helped": "Predicted: Nystrom should converge faster (fewer D needed to reach plateau) because its error decays as fast as eigenvalue tail, while RFF decays as O(1/sqrt(D)). At low D both should perform poorly; Nystrom should pull ahead in the medium budget range. At large D both should converge to exact SVM.",
+      "student_verification": "Actual results matched prediction: Nystrom reaches 96.0% at D=30; RFF never consistently exceeds 95.0% at any tested D. Nystrom convergence was faster as predicted.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 3,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.1",
+      "purpose": "Implement the landmark ablation \u2014 override sklearn's Nystroem to use non-data landmarks",
+      "prompt": "How do I force sklearn's Nystroem to use landmarks sampled from a uniform random distribution instead of from the training data? I want to ablate the data-adaptive landmark selection independently of the budget.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested fitting Nystroem on a separate random dataset (not training data) so that the landmark matrix nys.components_ comes from the random distribution. Then apply transform() to the actual training/test data.",
+      "student_verification": "Implemented and tested: nys_obj.fit(X_random) where X_random is uniform noise fills nys_obj.components_ with out-of-distribution points. Confirmed by inspecting nys_obj.components_.mean() which was near 0 (center of uniform distribution) vs training data mean of ~0.03.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "Wrote all ablation code independently, including the uniform noise generation and the transform pipeline. Used LLM only to confirm the Nystroem API mechanism."
+    },
+    {
+      "interaction_id": 4,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.1",
+      "purpose": "Interpret the landmark ablation result \u2014 why does the gap close at larger D?",
+      "prompt": "In Ablation 2, the accuracy gap between data-adaptive and random landmarks is -4pp at D=10 but closes to 0pp at D=30+. Why would the data-adaptive advantage disappear at larger D on a 2D dataset?",
+      "llm_response_used": "Yes",
+      "how_it_helped": "Explained: on a 2D dataset, D=30 random uniform landmarks happen to cover the 2D space adequately regardless of distribution. The data-adaptive advantage is most critical in high-dimensional spaces where random landmarks might miss the data manifold. This is a dimension-dependent effect not fully discussed in the paper.",
+      "student_verification": "Consistent with the theory: the error bound in Theorem 1 assumes landmarks are drawn from the training distribution, but on a 2D dataset the distribution is simple enough that any 30 points cover the relevant feature space. On 256D data (USPS), this gap would persist to larger D.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 5,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.1",
+      "purpose": "Write the 5-7 sentence interpretation paragraph for each ablation as required by the rubric",
+      "prompt": "For the budget ablation, write a 5-7 sentence interpretation that: discusses whether removing the component affected performance, whether the size of change matches expectation, and what this reveals about the component's contribution. Must reference Yang et al. 2012 specifically.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Provided a draft paragraph. I substantially rewrote it to include the specific numerical results (96.0% at D=30, never exceeds 95% for RFF), the eigenvalue tail sum reference from Theorem 1, and the 'medium-budget regime' framing.",
+      "student_verification": "Verified the paragraph accurately describes the experimental results and references Theorem 1 correctly.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "Rewrote entirely \u2014 added specific numbers, Theorem 1 reference, and the 'medium-budget' framing. LLM draft was a structural starting point only."
+    }
+  ],
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "interaction_id": 2,
+      "prompt": "Before I run the budget ablation, what do Theorems 1 and 2 predict about the shape of the accuracy vs D curve?",
+      "why_important": "This predictive prompt was the most analytically valuable \u2014 making predictions before running experiments is how science works. The prediction matching the actual result (Nystrom converges faster, gap is largest at medium D) confirmed genuine understanding rather than post-hoc rationalization."
+    },
+    {
+      "rank": 2,
+      "interaction_id": 4,
+      "prompt": "Why does the data-adaptive advantage close at larger D on a 2D dataset?",
+      "why_important": "The interpretation of this finding (gap closes at D=30 on 2D but would persist on 256D data) was the most insightful result of the ablation study. It revealed a dimension-dependent property not discussed in the paper."
+    },
+    {
+      "rank": 3,
+      "interaction_id": 3,
+      "prompt": "How do I force sklearn's Nystroem to use landmarks from a uniform random distribution instead of training data?",
+      "why_important": "The landmark ablation required a non-obvious sklearn API manipulation. This prompt identified the correct mechanism (fit on out-of-distribution data to override landmark selection)."
+    },
+    {
+      "rank": 4,
+      "interaction_id": 1,
+      "prompt": "What are the two most analytically interesting components to ablate in Yang et al. NIPS 2012's Nystrom pipeline?",
+      "why_important": "Choosing the right components to ablate is the most consequential decision in Task 3.1. Poor choices would result in experiments that don't illuminate the paper's contribution."
+    },
+    {
+      "rank": 5,
+      "interaction_id": 5,
+      "prompt": "Write a 5-7 sentence interpretation paragraph for the budget ablation referencing Yang et al. 2012 specifically",
+      "why_important": "The interpretation paragraphs are worth 6/10 marks per ablation. The draft provided a structural scaffold that I substantially improved with specific numbers and paper references."
+    }
+  ],
+  "student_declaration": {
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task in Part B.",
+    "understanding_acknowledged": true,
+    "signature": "Manu Vahan",
+    "date": "2026-03-07"
+  }
+}

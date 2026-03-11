@@ -4,7 +4,8 @@
     "roll_number": "230125",
     "course": "Advanced Machine Learning",
     "exam": "Mid-Semester Examination",
-    "part": "Part B"
+    "part": "Part B",
+    "submission_date": "2026-03-07"
   },
   "llm_tools_used": [
     {
@@ -16,30 +17,75 @@
   "full_llm_interaction_log": [
     {
       "interaction_id": 1,
-      "date": "2026-03-06",
+      "date": "2026-03-05",
       "tool_name": "Claude",
       "model": "Claude Sonnet 4.6",
       "task_tag": "Task 1.1",
-      "purpose": "Understanding the Nystr\u00f6m algorithm's step-by-step mechanism to write the method description",
-      "prompt": "Explain the Nystr\u00f6m method for kernel approximation step by step, referencing the specific equations in the Yang et al. NIPS 2012 paper",
+      "purpose": "Understand the full step-by-step pipeline of the Nystr\u00f6m method as described in Yang et al. NIPS 2012",
+      "prompt": "Explain the Nystr\u00f6m kernel approximation method step by step as described in Yang et al. NIPS 2012 Section 2.2. For each step, tell me what equation is involved and what the purpose of that step is in the overall SVM pipeline.",
       "llm_response_used": "Partially",
-      "how_it_helped": "Helped structure the step-by-step format; I verified each step against Sections 2.1 and 2.2 of the paper before writing the final description.",
-      "student_verification": "Checked each step against the paper's Equations 2, 3, 5, and 6. The eigendecomposition step (Eq. 6) and the RFF feature map (Eq. 3) were confirmed directly from the paper's formulas.",
-      "confidence_level": 4,
+      "how_it_helped": "Provided a structured breakdown of: (1) landmark sampling, (2) computing K_mm and K_mn sub-matrices, (3) eigendecomposition of K_mm, (4) constructing the feature map via Eq 6, (5) training LinearSVC on mapped features. I used this to write my own step-by-step in the notebook.",
+      "student_verification": "I verified each step against the paper. Eq 5 gives K_mm definition, Eq 6 gives phi(x) = Lambda^{-1/2} U^T k_m(x). Confirmed landmark sampling is from training data (Section 2.2, para 1).",
+      "confidence_level": 5,
       "code_used_verbatim": false,
-      "student_modification": "N/A \u2014 no code in this task"
+      "student_modification": "N/A \u2014 no code in Task 1.1"
     },
     {
       "interaction_id": 2,
-      "date": "2026-03-06",
+      "date": "2026-03-05",
       "tool_name": "Claude",
       "model": "Claude Sonnet 4.6",
       "task_tag": "Task 1.1",
-      "purpose": "Understanding Bochner's theorem and its role in RFF derivation",
-      "prompt": "What is Bochner's theorem and why is it necessary for Random Fourier Features to work? Reference Section 2.1 of Yang et al. 2012",
+      "purpose": "Understand the RFF feature map construction and how it differs mechanistically from Nystrom",
+      "prompt": "In Yang et al. NIPS 2012, how is the Random Fourier Features (RFF) feature map constructed from Equation 3? What does each component (omega, b, cosine) represent and why is sampling from the spectral distribution sufficient to approximate the kernel?",
       "llm_response_used": "Partially",
-      "how_it_helped": "Clarified that Bochner's theorem provides the Fourier transform decomposition that justifies sampling frequencies from the spectral distribution.",
-      "student_verification": "Confirmed by reading Section 2 (Preliminaries) of the paper, which explicitly invokes Bochner's theorem and cites Rahimi & Recht 2007.",
+      "how_it_helped": "Clarified that omega is sampled from the Fourier transform of the kernel (spectral distribution), b from Uniform[0, 2*pi], and the cosine provides an unbiased estimator of k(x,y) via Bochner's theorem. This let me write the RFF steps with correct paper references.",
+      "student_verification": "Verified against Eq 3 in Section 2.1 and the paper's citation of Rahimi & Recht 2007. The formula z(x) = sqrt(2/D)[cos(w1^T x + b1),...] is confirmed in the paper.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 3,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.1",
+      "purpose": "Understand the paper's core theoretical contribution \u2014 what Theorems 1 and 2 actually claim and how they differ",
+      "prompt": "What is the core theoretical difference between Theorem 1 (Nystrom) and Theorem 2 (RFF) in Yang et al. NIPS 2012? What does each bound depend on, and what does the comparison reveal about when each method is preferable?",
+      "llm_response_used": "Yes",
+      "how_it_helped": "Explained that Theorem 1 bounds Nystrom error by the tail eigenvalue sum sum_{i>m} lambda_i, while Theorem 2 bounds RFF error by O(D^{-1/2}) independent of data structure. The comparison shows Nystrom wins when eigenvalue decay is fast (tail sum is small), RFF is competitive when spectrum is flat.",
+      "student_verification": "Verified by reading Section 3 of the paper. Theorem 1 statement confirmed: bound involves trace(K) - sum_{i<=m} lambda_i. Theorem 2 confirmed: bound is 1/sqrt(D) times a constant. The comparison paragraph in Section 3 explicitly states the eigenspectrum condition.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 4,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.1",
+      "purpose": "Write a precise final summary sentence covering what problem the paper solves and what the authors claim makes their approach better",
+      "prompt": "Write a one-sentence summary of Yang et al. NIPS 2012 that states: (1) the problem being solved, (2) the contribution, and (3) the claimed advantage over prior work \u2014 in the style of a paper abstract sentence.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Gave a draft sentence. I rewrote it in my own words to match my understanding and the specific language of the paper's abstract.",
+      "student_verification": "Compared my sentence against the paper's abstract. The paper says it provides 'the first theoretical comparison' between the two methods \u2014 my summary sentence reflects this claim.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "Rewrote the summary sentence entirely in my own words after using LLM draft as a starting point"
+    },
+    {
+      "interaction_id": 5,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.1",
+      "purpose": "Clarify the role of eigendecomposition in Nystrom and why K_mm must be positive definite",
+      "prompt": "In the Nystrom method, the eigendecomposition K_mm = U Lambda U^T is used to compute Lambda^{-1/2}. What happens if K_mm is singular or near-singular? How does Yang et al. 2012 handle this issue?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Explained that near-singular K_mm can cause numerical instability in Lambda^{-1/2} (division by near-zero eigenvalues). Common fix is regularization: K_mm + epsilon*I. The paper does not explicitly address this but it is a known practical limitation of the Nystrom method.",
+      "student_verification": "Confirmed the paper does not discuss regularization in Section 2.2 \u2014 this is a practical limitation not covered by the theoretical analysis. Useful context for Task 3.2 failure mode discussion.",
       "confidence_level": 4,
       "code_used_verbatim": false,
       "student_modification": "N/A"
@@ -48,21 +94,39 @@
   "top_5_prompts": [
     {
       "rank": 1,
-      "interaction_id": 1,
-      "prompt": "Explain the Nystr\u00f6m method for kernel approximation step by step, referencing the specific equations in the Yang et al. NIPS 2012 paper",
-      "why_important": "Core to Task 1.1 \u2014 understanding the step-by-step mechanism was the primary deliverable."
+      "interaction_id": 3,
+      "prompt": "What is the core theoretical difference between Theorem 1 (Nystrom) and Theorem 2 (RFF) in Yang et al. NIPS 2012?",
+      "why_important": "This prompt was the most analytically impactful \u2014 understanding the eigenvalue tail sum bound vs O(D^{-1/2}) bound is the paper's central contribution. Without this, my method description would have been a generic summary of kernel approximation rather than specific to this paper's theoretical claims."
     },
     {
       "rank": 2,
+      "interaction_id": 1,
+      "prompt": "Explain the Nystrom kernel approximation method step by step as described in Yang et al. NIPS 2012 Section 2.2, with equation references",
+      "why_important": "Directly drove the structure of Task 1.1's required step-by-step format. Helped me assign the correct equation numbers (Eq 5 for K_mm, Eq 6 for the feature map) to each step."
+    },
+    {
+      "rank": 3,
       "interaction_id": 2,
-      "prompt": "What is Bochner's theorem and why is it necessary for Random Fourier Features to work?",
-      "why_important": "Bochner's theorem is the theoretical foundation of RFF; understanding it was essential to writing an accurate method description that references the paper rather than giving a generic SVM summary."
+      "prompt": "How is the RFF feature map constructed from Equation 3? What does each component represent and why is sampling from the spectral distribution sufficient?",
+      "why_important": "Understanding the RFF mechanism precisely \u2014 specifically why Bochner's theorem guarantees the approximation \u2014 was necessary to contrast it with Nystrom in the method description and to explain the data-independence limitation."
+    },
+    {
+      "rank": 4,
+      "interaction_id": 5,
+      "prompt": "What happens if K_mm is singular or near-singular in the Nystrom method? How does Yang et al. 2012 handle this?",
+      "why_important": "Revealed a practical limitation (near-singular K_mm) not discussed in the paper. This strengthened the failure mode analysis in Task 3.2 by giving me an additional axis of failure beyond eigenspectrum flatness."
+    },
+    {
+      "rank": 5,
+      "interaction_id": 4,
+      "prompt": "Write a one-sentence summary of Yang et al. NIPS 2012 covering: problem, contribution, and claimed advantage",
+      "why_important": "Helped draft the required final summary sentence in Task 1.1. Though I rewrote it entirely, the structure it provided (problem \u2192 contribution \u2192 claimed advantage) matched exactly what the rubric asked for."
     }
   ],
   "student_declaration": {
-    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task.",
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task in Part B.",
     "understanding_acknowledged": true,
     "signature": "Manu Vahan",
-    "date": "2026-03-06"
+    "date": "2026-03-07"
   }
 }

@@ -1,0 +1,132 @@
+{
+  "student_metadata": {
+    "name": "Manu Vahan",
+    "roll_number": "230125",
+    "course": "Advanced Machine Learning",
+    "exam": "Mid-Semester Examination",
+    "part": "Part B",
+    "submission_date": "2026-03-07"
+  },
+  "llm_tools_used": [
+    {
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "provider": "Anthropic"
+    }
+  ],
+  "full_llm_interaction_log": [
+    {
+      "interaction_id": 1,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.2",
+      "purpose": "Design a failure mode that is directly rooted in one of the assumptions from Task 1.2",
+      "prompt": "Design a failure mode experiment for Yang et al. NIPS 2012 that directly links to one of my Task 1.2 assumptions. It must be a data distribution or hyperparameter regime where Nystrom fails noticeably. The failure should close the loop with the eigenspectrum decay assumption.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Confirmed uniform distribution data as the theoretically grounded failure mode. The flat eigenspectrum means Nystrom's bound no longer improves faster than RFF's, so the advantage disappears. Also suggested comparing eigenvalue decay ratios as quantitative evidence.",
+      "student_verification": "Verified: uniform distribution in 2D gives near-flat RBF kernel matrix. Measured lambda_1/lambda_10 = 27.3 vs 36.7 for moons. The Nystrom advantage dropped from +2.9pp to +1.2pp \u2014 quantitatively confirming the failure mode.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 2,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.2",
+      "purpose": "Understand why flat eigenspectrum means Nystrom's bound becomes equivalent to RFF's",
+      "prompt": "Mathematically, why does a flat eigenspectrum cause Nystrom's bound from Theorem 1 to become equivalent to RFF's bound from Theorem 2? Walk through the algebra.",
+      "llm_response_used": "Yes",
+      "how_it_helped": "When all eigenvalues are equal: lambda_i = lambda/n for all i. The tail sum sum_{i>m} lambda_i = (n-m)*lambda/n. This is a linear function of m, not an exponentially decaying one. For Nystrom to match RFF's O(D^{-1/2}) rate, the tail sum must decay at rate D^{-1/2}, which only happens when eigenvalues decay geometrically.",
+      "student_verification": "Verified the algebra: with flat spectrum, tail sum = (n-m)*lambda/n. Setting m=D, this is (n-D)*lambda/n which decays as D/n, not as D^{-1/2}. For n=350, D=100: tail = 250/350 = 71%, still large. RFF's bound at D=100 is proportional to 1/10 = 10%. The bounds are not comparable in this regime \u2014 RFF's is actually tighter.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 3,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.2",
+      "purpose": "Suggest a concrete, implementable modification to address the flat-spectrum failure",
+      "prompt": "What is a concrete modification to the Nystrom method that would help it perform better under flat eigenspectrum conditions? It should be something that could realistically be implemented and tested.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested k-means based landmark selection: cluster training data into m groups, use centroids as landmarks. Even under flat spectrum, this spreads landmarks maximally, reducing the chance of redundant landmarks. Also suggested leverage score sampling as a more principled approach.",
+      "student_verification": "K-means landmark selection is discussed in related work (Zhang et al. 2008 is cited in the broader Nystrom literature). The paper itself does not propose this \u2014 appropriate to suggest as an improvement direction without claiming it is the paper's contribution.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 4,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.2",
+      "purpose": "Write the 5-7 sentence explanation linking the failure to the method's assumptions",
+      "prompt": "Write a 5-7 sentence paragraph explaining why Nystrom fails under flat eigenspectrum, linking the failure to Assumption 2 from Task 1.2 (eigenspectrum decay) and to Theorem 1 of Yang et al. 2012 specifically.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Provided a draft explanation. I revised it to include the specific eigenvalue ratio numbers (27.3 vs 36.7), the mathematical bound comparison, and the quantitative advantage reduction (2.9pp to 1.2pp, 59% reduction).",
+      "student_verification": "All numbers are from my actual experimental results. The Theorem 1 reference (tail sum) is accurate. The 'closes the loop' framing connects Task 1.2's Assumption 2 to Task 3.2 as required by the rubric.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "Heavily revised \u2014 added all quantitative results and tightened the Theorem 1 connection from vague to equation-specific"
+    },
+    {
+      "interaction_id": 5,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 3.2",
+      "purpose": "Check whether the failure mode also applies to the near-singular K_mm scenario identified in Task 1.1",
+      "prompt": "Is near-singular K_mm (when eigenvalues of the landmark sub-matrix are nearly zero) a separate failure mode from flat eigenspectrum? Could I test both in Task 3.2?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Confirmed they are distinct failure modes but related: flat eigenspectrum in the full matrix K can cause K_mm to also be near-singular when landmarks happen to cluster together. However, testing both would complicate Task 3.2 \u2014 better to focus on one clean failure mode that is directly linked to the stated assumption.",
+      "student_verification": "Chose to focus on flat eigenspectrum only, as it is directly traceable to Assumption 2 from Task 1.2. Near-singular K_mm is a separate practical issue not covered by the paper's theory.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    }
+  ],
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "interaction_id": 2,
+      "prompt": "Mathematically, why does a flat eigenspectrum cause Nystrom's Theorem 1 bound to become equivalent to RFF's Theorem 2 bound?",
+      "why_important": "Task 3.2 awards 7/15 marks for 'explanation linking the failure to the method's assumptions'. Working through the algebra confirmed the flat-spectrum failure is mathematically grounded in Theorem 1 \u2014 not just an empirical observation. This was the most analytically rigorous prompt in the entire Part B."
+    },
+    {
+      "rank": 2,
+      "interaction_id": 1,
+      "prompt": "Design a failure mode experiment for Yang et al. NIPS 2012 that directly closes the loop with the eigenspectrum decay assumption from Task 1.2",
+      "why_important": "The rubric explicitly rewards failure modes rooted in Task 1.2 assumptions. This prompt helped design an experiment with a clear theoretical justification and a measurable outcome."
+    },
+    {
+      "rank": 3,
+      "interaction_id": 4,
+      "prompt": "Write a 5-7 sentence paragraph explaining the failure, linking it to Assumption 2 and Theorem 1 specifically",
+      "why_important": "The 7-mark explanation paragraph is the highest-value component of Task 3.2. The draft provided a structure that I improved with specific numbers and equation references."
+    },
+    {
+      "rank": 4,
+      "interaction_id": 3,
+      "prompt": "What is a concrete modification to Nystrom that would help under flat eigenspectrum conditions?",
+      "why_important": "The concrete modification suggestion is worth 3 marks. K-means landmark selection is a realistic, implementable suggestion that goes beyond the paper's own content."
+    },
+    {
+      "rank": 5,
+      "interaction_id": 5,
+      "prompt": "Is near-singular K_mm a separate failure mode from flat eigenspectrum? Could I test both?",
+      "why_important": "Helped me make a deliberate decision to focus on one clean failure mode rather than diluting the analysis. Focused experiments with clear theoretical links are more valuable than multiple weakly connected failure modes."
+    }
+  ],
+  "student_declaration": {
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task in Part B.",
+    "understanding_acknowledged": true,
+    "signature": "Manu Vahan",
+    "date": "2026-03-07"
+  }
+}

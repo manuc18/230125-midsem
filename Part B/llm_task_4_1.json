@@ -1,0 +1,90 @@
+{
+  "student_metadata": {
+    "name": "Manu Vahan",
+    "roll_number": "230125",
+    "course": "Advanced Machine Learning",
+    "exam": "Mid-Semester Examination",
+    "part": "Part B",
+    "submission_date": "2026-03-07"
+  },
+  "llm_tools_used": [
+    {
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "provider": "Anthropic"
+    }
+  ],
+  "full_llm_interaction_log": [
+    {
+      "interaction_id": 1,
+      "date": "2026-03-07",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 4.1",
+      "purpose": "Structure the 4-page report to cover all five required sections within the page limit",
+      "prompt": "Structure a 4-page report for Part B of an ML exam. Required sections: (1) paper summary, (2) reproduction setup and result with honest commentary, (3) two ablation findings, (4) failure mode and explanation, (5) honest reflection. What is the right page allocation and section order?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested page allocation: summary ~0.5 pages, reproduction ~1 page, ablations ~1 page, failure ~0.75 pages, reflection ~0.5 pages. This fit within 4 pages with a results table and two figures.",
+      "student_verification": "Used this structure and verified the final PDF fits within 4 pages (excluding references). All five sections present.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 2,
+      "date": "2026-03-07",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 4.1",
+      "purpose": "Write the honest reflection section \u2014 specifically what I could not implement and what surprised me",
+      "prompt": "Write an honest reflection for my Part B report covering: what I could not implement (USPS dataset), what surprised me (landmark gap closing at D=30), and what I would revisit (k-means landmarks, high-dimensional testing). Make it specific to the Nystrom paper.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Provided a draft. I rewrote it to add specifics: the eigenvalue ratio (36.7 for moons, would be different on 256D USPS data), the 59% advantage reduction in failure mode, and the specific revisit items.",
+      "student_verification": "Verified all claims in the reflection are accurate and match my actual experimental observations.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "Substantially rewrote \u2014 added all quantitative specifics, changed the tone to be more personal and analytically grounded"
+    },
+    {
+      "interaction_id": 3,
+      "date": "2026-03-07",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 4.1",
+      "purpose": "Write the one-paragraph paper summary for the report in my own words",
+      "prompt": "Write a one-paragraph summary of Yang et al. NIPS 2012 as it would appear in a student exam report. Should cover: problem, method, core contribution (Theorems 1 and 2), and key finding.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Provided a draft summary. I rewrote it to emphasize the theoretical comparison angle (Theorem 1 vs Theorem 2) more explicitly and to use language consistent with my Task 1.1 description.",
+      "student_verification": "Summary accurately represents the paper's content. Verified against paper abstract and Section 3.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "Rewrote to add equation-level specifics (tail eigenvalue sum, O(D^{-1/2})) and to maintain consistency with Task 1.1 language"
+    }
+  ],
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "interaction_id": 2,
+      "prompt": "Write an honest reflection covering what I could not implement, what surprised me, and what I would revisit",
+      "why_important": "The reflection is 3 marks of Task 4.1 and is the most personal section of the report. The draft gave a structure that I filled with specific quantitative results from my actual experiments \u2014 making it genuine rather than generic."
+    },
+    {
+      "rank": 2,
+      "interaction_id": 1,
+      "prompt": "Structure a 4-page report with required sections and suggest page allocation",
+      "why_important": "Page allocation planning prevented the report from running over the 4-page limit. The suggested allocation (0.5+1+1+0.75+0.5) fit all five required sections with space for a table and two figures."
+    },
+    {
+      "rank": 3,
+      "interaction_id": 3,
+      "prompt": "Write a one-paragraph paper summary for a student exam report covering problem, method, contribution, and key finding",
+      "why_important": "The paper summary is the first section of the report and sets the tone. The draft ensured all four required elements were present before I rewrote it with equation-level specifics."
+    }
+  ],
+  "student_declaration": {
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task in Part B.",
+    "understanding_acknowledged": true,
+    "signature": "Manu Vahan",
+    "date": "2026-03-07"
+  }
+}

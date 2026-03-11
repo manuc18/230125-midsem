@@ -1,0 +1,90 @@
+{
+  "student_metadata": {
+    "name": "Manu Vahan",
+    "roll_number": "230125",
+    "course": "Advanced Machine Learning",
+    "exam": "Mid-Semester Examination",
+    "part": "Part B",
+    "submission_date": "2026-03-07"
+  },
+  "llm_tools_used": [
+    {
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "provider": "Anthropic"
+    }
+  ],
+  "full_llm_interaction_log": [
+    {
+      "interaction_id": 1,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 2.1",
+      "purpose": "Select a toy dataset that genuinely tests the Nystrom vs RFF comparison rather than being trivially separable",
+      "prompt": "I need a toy dataset to reproduce the Nystrom vs RFF kernel SVM comparison from Yang et al. NIPS 2012. The dataset must be non-linearly separable (so a kernel is genuinely needed) and should have a fast-decaying RBF kernel matrix eigenspectrum. What are good options from sklearn?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested make_moons, make_circles, and make_classification with RBF-relevant settings. Recommended make_moons specifically because its crescent geometry creates strong local structure that produces fast eigenvalue decay in RBF kernels.",
+      "student_verification": "Verified by computing lambda_1/lambda_10 for make_moons (36.7) vs make_circles (24.3). make_moons gives stronger eigenvalue decay, making it the better testbed for the paper's key claim.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A \u2014 independently chose make_moons over make_circles based on eigenvalue diagnostic"
+    },
+    {
+      "interaction_id": 2,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 2.1",
+      "purpose": "Justify the dataset choice in terms specific to this paper, not just general SVM appropriateness",
+      "prompt": "How should I justify the choice of make_moons for reproducing the Yang et al. NIPS 2012 paper specifically? The justification needs to reference the paper's methodology, not just say it is non-linearly separable.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested framing the justification around: (1) non-linear separability requires genuine kernel, (2) RBF kernel on make_moons produces fast-decaying eigenspectrum (matches Theorem 1's regime), (3) dataset size matches CPU-only constraint.",
+      "student_verification": "Used framework but rewrote justification in my own words. Added the specific eigenvalue decay ratio (36.7) as quantitative support \u2014 something LLM did not generate.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "Added quantitative eigenvalue ratio measurement and limitation comparison (2D vs 256D paper dataset) independently"
+    },
+    {
+      "interaction_id": 3,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 2.1",
+      "purpose": "Identify and document the limitations of make_moons compared to the paper's actual datasets",
+      "prompt": "What are the key limitations of using make_moons instead of the paper's actual datasets (USPS: 7291 samples, 256 features; GISETTE: 6000 samples, 5000 features) for reproducing Yang et al. 2012?",
+      "llm_response_used": "Yes",
+      "how_it_helped": "Identified three limitations: (1) scale difference (350 vs 7291 train samples), (2) dimensionality (2D vs 256D/5000D) means scalability claims cannot be verified, (3) make_moons has inherent irreducible noise (~5%) from noise=0.25 that USPS does not have. Used all three in my dataset limitation discussion.",
+      "student_verification": "All three limitations are factually accurate. Verified: USPS has 256 features (16x16 pixel images), GISETTE has 5000 features. The noise floor of make_moons with noise=0.25 is approximately 5% as checked by exact SVM accuracy of 94.67%.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    }
+  ],
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "interaction_id": 1,
+      "prompt": "I need a toy dataset that is non-linearly separable and has fast-decaying RBF kernel matrix eigenspectrum. What are good options from sklearn?",
+      "why_important": "Dataset choice affects every subsequent experiment in Tasks 2.2, 2.3, 3.1, and 3.2. Selecting a dataset with the right spectral properties (fast eigenvalue decay) was essential to reproduce the paper's key finding rather than accidentally testing a failure mode."
+    },
+    {
+      "rank": 2,
+      "interaction_id": 3,
+      "prompt": "What are the key limitations of using make_moons instead of USPS and GISETTE for reproducing Yang et al. 2012?",
+      "why_important": "Task 2.1 requires 3-5 sentences of justification including dataset limitations. This prompt generated the three specific, quantitative limitations (scale, dimensionality, noise floor) used in the notebook."
+    },
+    {
+      "rank": 3,
+      "interaction_id": 2,
+      "prompt": "How should I justify make_moons specifically with reference to Yang et al. 2012's methodology?",
+      "why_important": "The rubric penalises generic justifications ('it is non-linearly separable') and rewards paper-specific reasoning. This prompt helped me frame the justification around the paper's theoretical conditions (eigenspectrum decay) rather than generic SVM properties."
+    }
+  ],
+  "student_declaration": {
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task in Part B.",
+    "understanding_acknowledged": true,
+    "signature": "Manu Vahan",
+    "date": "2026-03-07"
+  }
+}

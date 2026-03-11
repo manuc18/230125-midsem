@@ -1,0 +1,132 @@
+{
+  "student_metadata": {
+    "name": "Manu Vahan",
+    "roll_number": "230125",
+    "course": "Advanced Machine Learning",
+    "exam": "Mid-Semester Examination",
+    "part": "Part B",
+    "submission_date": "2026-03-07"
+  },
+  "llm_tools_used": [
+    {
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "provider": "Anthropic"
+    }
+  ],
+  "full_llm_interaction_log": [
+    {
+      "interaction_id": 1,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 2.2",
+      "purpose": "Confirm that sklearn's Nystroem and RBFSampler implement exactly the paper's Equations 6 and 3",
+      "prompt": "Does sklearn.kernel_approximation.Nystroem implement exactly Equation 6 of Yang et al. 2012 \u2014 specifically phi(x) = Lambda^{-1/2} U^T k_m(x)? And does RBFSampler implement the RFF feature map from Equation 3?",
+      "llm_response_used": "Yes",
+      "how_it_helped": "Confirmed: Nystroem implements Eq 6 exactly, citing Williams & Seeger (2001) which Yang et al. also cites. RBFSampler implements Eq 3, citing Rahimi & Recht (2007) which Yang et al. also cites. This meant I could directly reference these equations in my notebook annotations.",
+      "student_verification": "Cross-checked sklearn docs: Nystroem documentation says 'Approximates feature map of an RBF kernel by Monte Carlo approximation of its Fourier transform' \u2014 actually this is RBFSampler. Nystroem documentation references Williams & Seeger 2000. Both confirmed to align with the paper's referenced methods.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 2,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 2.2",
+      "purpose": "Choose the right evaluation metric to match the paper and decide what 'reproduction' means for this paper",
+      "prompt": "Yang et al. 2012 reports results in Table 1 using accuracy on USPS and GISETTE. What is the right evaluation metric to use when reproducing on make_moons? Should I report accuracy or something else?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Confirmed accuracy is the right metric (matches Table 1), and suggested also plotting accuracy vs budget D to reproduce the paper's Figure 1 analog. This shaped the reproduction experiment design.",
+      "student_verification": "Confirmed: Table 1 in the paper uses accuracy (correct classification rate) as the metric. The sweep over budget D is exactly Figure 1's x-axis.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 3,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 2.2",
+      "purpose": "Understand what gamma value to use for the RBF kernel and why it matters for reproducing the paper",
+      "prompt": "What gamma value should I use for the RBF kernel when reproducing Yang et al. 2012 on make_moons? The paper uses specific gamma settings for USPS and GISETTE. How should I choose gamma for a 2D dataset?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested using gamma=0.5 as a reasonable middle ground for 2D data (not too narrow, not too broad), and recommended cross-validation if accuracy is a concern. Also explained that the paper's gamma values are dataset-specific and not directly transferable to make_moons.",
+      "student_verification": "Tried gamma values 0.1, 0.5, 1.0 on the exact SVM. gamma=0.5 gave 94.67% (best), gamma=0.1 gave 91.33%, gamma=1.0 gave 93.33%. Chose gamma=0.5 and documented this selection.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A \u2014 ran my own gamma sweep to justify the choice empirically"
+    },
+    {
+      "interaction_id": 4,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 2.2",
+      "purpose": "Write paper-specific code annotations linking each code block to the paper's equations",
+      "prompt": "For the code block that runs the Nystroem + LinearSVC pipeline, write a 2-3 sentence annotation that explains what the code computes and references the specific equation in Yang et al. 2012 it implements",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Provided a draft annotation linking Nystroem to Eq 6 and LinearSVC to the SVM objective. I revised the annotation to be more specific about the eigendecomposition step and the 'data-adaptive' property.",
+      "student_verification": "Verified the annotation is accurate: Nystroem's fit() computes eigendecomposition of K_mm, transform() applies Eq 6. LinearSVC trains a linear SVM on the mapped features.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "Substantially rewrote the annotation to include the eigendecomposition detail and the 'data-adaptive' framing from the paper"
+    },
+    {
+      "interaction_id": 5,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 2.2",
+      "purpose": "Understand why RFF shows more variance than Nystrom at medium budgets on the accuracy vs D plot",
+      "prompt": "In the reproduction results, RFF shows more variance across budget values D than Nystrom \u2014 it doesn't monotonically increase. Why would this happen according to the theory in Yang et al. 2012?",
+      "llm_response_used": "Yes",
+      "how_it_helped": "Explained that RFF's Monte Carlo estimator has O(1/sqrt(D)) variance, so at moderate D the estimator is noisy. On 2D data, each random frequency covers a larger fraction of the frequency space, increasing inter-run variance. Nystrom's deterministic eigendecomposition gives more stable results at the same budget.",
+      "student_verification": "Consistent with the paper's Theorem 2: the O(D^{-1/2}) bound applies in expectation but individual runs can vary. The deterministic nature of Nystroem (once landmarks are fixed) explains its smoother accuracy vs D curve.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    }
+  ],
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "interaction_id": 3,
+      "prompt": "What gamma value should I use for the RBF kernel when reproducing Yang et al. 2012 on make_moons?",
+      "why_important": "Gamma is the most sensitive hyperparameter in RBF kernel SVMs. Choosing it without justification would undermine the reproduction's validity. This prompt motivated a gamma sweep that I ran independently to select gamma=0.5 empirically."
+    },
+    {
+      "rank": 2,
+      "interaction_id": 1,
+      "prompt": "Does sklearn.kernel_approximation.Nystroem implement exactly Equation 6 of Yang et al. 2012?",
+      "why_important": "Task 2.2 is graded primarily on code-to-paper annotations. Confirming the sklearn implementation matches the paper's equations allowed me to cite Eq 6 and Eq 3 with confidence in the notebook annotations."
+    },
+    {
+      "rank": 3,
+      "interaction_id": 5,
+      "prompt": "Why does RFF show more variance than Nystrom at medium budgets on the accuracy vs D plot?",
+      "why_important": "Understanding the source of RFF's variance (Monte Carlo noise from O(1/sqrt(D)) estimator) allowed me to interpret the reproduction result accurately rather than treating it as an implementation error."
+    },
+    {
+      "rank": 4,
+      "interaction_id": 4,
+      "prompt": "For the Nystroem + LinearSVC code block, write an annotation linking it to Yang et al. 2012 equations",
+      "why_important": "Code-to-paper annotations are the primary grading criterion for Task 2.2 (20 marks). This prompt provided a draft I then substantially improved with paper-specific details."
+    },
+    {
+      "rank": 5,
+      "interaction_id": 2,
+      "prompt": "What is the right evaluation metric to use when reproducing on make_moons? Should I report accuracy or something else?",
+      "why_important": "Confirming accuracy as the metric (matching Table 1 of the paper) and identifying the accuracy vs D sweep as the core experiment to reproduce was a foundational decision for Task 2.2."
+    }
+  ],
+  "student_declaration": {
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task in Part B.",
+    "understanding_acknowledged": true,
+    "signature": "Manu Vahan",
+    "date": "2026-03-07"
+  }
+}

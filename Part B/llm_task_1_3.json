@@ -1,0 +1,117 @@
+{
+  "student_metadata": {
+    "name": "Manu Vahan",
+    "roll_number": "230125",
+    "course": "Advanced Machine Learning",
+    "exam": "Mid-Semester Examination",
+    "part": "Part B",
+    "submission_date": "2026-03-07"
+  },
+  "llm_tools_used": [
+    {
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "provider": "Anthropic"
+    }
+  ],
+  "full_llm_interaction_log": [
+    {
+      "interaction_id": 1,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.3",
+      "purpose": "Identify the main baseline the paper compares against and what limitation it identifies",
+      "prompt": "In Yang et al. NIPS 2012, what is the main baseline method? What specific limitation does the paper identify in it that motivates the Nystrom comparison? Quote or reference the section where this limitation is stated.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Confirmed RFF (Rahimi & Recht 2007) is the main baseline. The limitation identified: RFF uses data-independent random projections \u2014 it cannot adapt to the spectral structure of the training data. Referenced Section 1 (Introduction) where this is stated.",
+      "student_verification": "Re-read Section 1. The paper explicitly says RFF's approximation error depends only on D, not on the data structure \u2014 this is the stated limitation. The word 'data-independent' appears in the paper's introduction.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 2,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.3",
+      "purpose": "Understand exactly how Nystrom overcomes RFF's limitation per the paper's argument",
+      "prompt": "How does the Nystrom method address RFF's data-independence limitation according to Yang et al. 2012? What is the precise mechanism, and which equations support the claim that Nystrom adapts to data structure?",
+      "llm_response_used": "Yes",
+      "how_it_helped": "Explained the mechanism: Nystrom samples landmarks from the training data, making K_mm reflect the actual spectral structure of the full kernel matrix K. The feature map phi(x) therefore aligns with eigenvectors of K rather than random directions. Theorem 1's bound sum_{i>m} lambda_i is small exactly because the dominant eigenvectors are captured.",
+      "student_verification": "Verified via Theorem 1: the bound expression sum_{i>m} lambda_i is the tail eigenvalue sum of the full kernel matrix K \u2014 not K_mm. This means Nystrom's quality is measured against the full spectrum, and it wins when that spectrum decays fast.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 3,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.3",
+      "purpose": "Identify a condition where Nystrom would NOT outperform RFF \u2014 must be reasoned inference not just paper restatement",
+      "prompt": "Based on Theorems 1 and 2 in Yang et al. 2012, construct a scenario where RFF would outperform or match Nystrom. This should be a reasoned inference from the theory, not something the paper states explicitly.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested two scenarios: (1) flat eigenspectrum \u2014 tail sum remains large, RFF's O(D^{-1/2}) bound becomes competitive; (2) very large budget D \u2014 both methods converge to exact kernel, difference vanishes. Also suggested (3) noisy landmark selection leading to poor K_mm eigendecomposition.",
+      "student_verification": "Scenario (1): confirmed \u2014 when all lambda_i = lambda/n, the tail sum sum_{i>m} lambda_i = (n-m)*lambda/n, which decays slowly, matching RFF's bound. Scenario (2): as D approaches n, Nystrom's feature map spans nearly the full kernel space, same as exact kernel. Both are valid inferences from Theorems 1 and 2.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 4,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.3",
+      "purpose": "Assess whether the paper's performance claims are supported by its experimental design",
+      "prompt": "Does Yang et al. 2012 provide sufficient empirical evidence for its claim that Nystrom outperforms RFF? What are the gaps or weaknesses in their experimental validation?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Identified that experiments are on only two benchmark datasets (USPS, GISETTE), both with fast-decaying eigenspectra \u2014 so the paper never tests the flat-spectrum setting where its own theory predicts Nystrom would lose. This is a genuine gap in the experimental validation.",
+      "student_verification": "Checked Section 4: only USPS and GISETTE are evaluated. Neither is a flat-spectrum dataset. This gap is not acknowledged in the paper's limitations section, making it a genuine weakness identified through reasoning.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    }
+  ],
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "interaction_id": 3,
+      "prompt": "Based on Theorems 1 and 2, construct a scenario where RFF would outperform or match Nystrom \u2014 a reasoned inference from theory",
+      "why_important": "This is the 4-mark sub-question in Task 1.3. The rubric asks for 'your own reasoned inference' \u2014 this prompt helped me go beyond what the paper explicitly states. The flat eigenspectrum scenario was then empirically verified in Task 3.2, creating a coherent thread across the submission."
+    },
+    {
+      "rank": 2,
+      "interaction_id": 2,
+      "prompt": "How does Nystrom address RFF's data-independence limitation? What is the precise mechanism and which equations support this?",
+      "why_important": "Required for the 'how the proposed method overcomes the limitation' sub-question. The equation-level explanation (Theorem 1's tail eigenvalue bound) made this answer specific to the paper rather than a generic statement about kernel methods."
+    },
+    {
+      "rank": 3,
+      "interaction_id": 1,
+      "prompt": "What is the main baseline in Yang et al. 2012 and what specific limitation does it identify?",
+      "why_important": "Directly answered the 2-mark sub-question. Identifying 'data-independent random projections' as the precise limitation (rather than vaguely saying 'less accurate') was important for full marks."
+    },
+    {
+      "rank": 4,
+      "interaction_id": 4,
+      "prompt": "Does Yang et al. 2012 provide sufficient empirical evidence for its claims? What are the gaps in the experimental validation?",
+      "why_important": "Revealed the paper only tests fast-decay datasets \u2014 a gap in experimental coverage that the paper's own theory predicts would show a different result. This critical reflection strengthened my 'failure condition' answer and showed independent analytical thinking."
+    },
+    {
+      "rank": 5,
+      "interaction_id": 3,
+      "prompt": "Construct a scenario where RFF would outperform or match Nystrom \u2014 large budget regime convergence",
+      "why_important": "The large-budget convergence scenario (as D approaches n, both methods converge to exact kernel) is a second valid failure condition I included in Task 1.3 as additional evidence of reasoned inference from the theory."
+    }
+  ],
+  "student_declaration": {
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task in Part B.",
+    "understanding_acknowledged": true,
+    "signature": "Manu Vahan",
+    "date": "2026-03-07"
+  }
+}

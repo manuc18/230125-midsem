@@ -1,0 +1,132 @@
+{
+  "student_metadata": {
+    "name": "Manu Vahan",
+    "roll_number": "230125",
+    "course": "Advanced Machine Learning",
+    "exam": "Mid-Semester Examination",
+    "part": "Part B",
+    "submission_date": "2026-03-07"
+  },
+  "llm_tools_used": [
+    {
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "provider": "Anthropic"
+    }
+  ],
+  "full_llm_interaction_log": [
+    {
+      "interaction_id": 1,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.2",
+      "purpose": "Identify assumptions embedded in the paper's contribution rather than generic ML assumptions",
+      "prompt": "What are the method-specific assumptions embedded in Yang et al. NIPS 2012 \u2014 not generic ones like i.i.d. data, but assumptions that are specific to how the Nystrom approximation and RFF work and that the theoretical guarantees depend on?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Identified: (1) shift-invariant kernel requirement for Bochner's theorem, (2) fast-decaying eigenspectrum for Nystrom's advantage, (3) landmark representativeness assumption. Used these as starting points and wrote violation scenarios and paper references independently.",
+      "student_verification": "Each assumption traced to the paper: (1) Section 2 Bochner citation; (2) Section 3 Theorem 1 eigenvalue tail bound; (3) Section 2.2 landmark sampling description.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 2,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.2",
+      "purpose": "Think through violation scenarios for the shift-invariance assumption",
+      "prompt": "Give me a concrete real-world dataset or application where the shift-invariance assumption required by RFF (Bochner's theorem) would be violated. What would happen to the approximation quality?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Suggested text data with polynomial kernels (k(x,y) = (x^T y + c)^d) as a shift-invariant violation. Also mentioned graph kernels on molecular data as a non-Euclidean space where no spectral distribution p(omega) exists.",
+      "student_verification": "Verified: polynomial kernel k(x,y) = (x^T y + c)^d is NOT shift-invariant because k(x,y) != k(x-y) \u2014 it depends on absolute values, not differences. Confirmed in any standard kernel methods textbook.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 3,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.2",
+      "purpose": "Understand what 'fast-decaying eigenspectrum' means quantitatively and how to recognize it",
+      "prompt": "How would I recognize whether a dataset has a fast-decaying or flat kernel matrix eigenspectrum in practice? What is the quantitative criterion the paper uses, and can I measure this on my toy dataset?",
+      "llm_response_used": "Yes",
+      "how_it_helped": "Suggested computing the eigenvalue decay ratio lambda_1/lambda_k as a quick diagnostic. A ratio > 10-20x between the first and 10th eigenvalue indicates fast decay. Also suggested plotting the eigenspectrum on a log scale \u2014 a steep slope means fast decay.",
+      "student_verification": "Applied this: make_moons gave lambda_1/lambda_10 = 36.7 (fast decay), uniform data gave 27.3 (flatter). This quantitative test was used directly in the Task 3.2 failure mode experiment.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A \u2014 used the diagnostic concept, independently wrote the eigenvalue computation code"
+    },
+    {
+      "interaction_id": 4,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.2",
+      "purpose": "Think through violation of the landmark representativeness assumption in imbalanced settings",
+      "prompt": "When would the Nystrom method's uniform landmark sampling fail because landmarks are not representative of the training distribution? Give a concrete failure scenario with real data characteristics.",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Identified class imbalance as the clearest violation scenario: if 90% of training data is class 0, uniform sampling draws mostly class 0 landmarks, leaving the kernel approximation poor for class 1 samples.",
+      "student_verification": "This is a direct consequence of uniform sampling from a biased distribution \u2014 verified by reasoning through what K_mm would look like if landmarks are all from one class (the matrix would not capture inter-class kernel relationships).",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    },
+    {
+      "interaction_id": 5,
+      "date": "2026-03-05",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.2",
+      "purpose": "Verify whether all three assumptions are 'traceable to the paper' as required by Task 1.2",
+      "prompt": "For each of these three assumptions \u2014 shift-invariance, eigenspectrum decay, landmark representativeness \u2014 can you point to a specific equation, section, or sentence in Yang et al. NIPS 2012 where each assumption appears explicitly or implicitly?",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Confirmed: shift-invariance appears in Section 2 (Bochner's theorem paragraph); eigenspectrum decay appears implicitly in Theorem 1's bound expression; landmark representativeness appears in Section 2.2 where uniform sampling from training data is described as the method.",
+      "student_verification": "Re-read all three cited sections in the paper to confirm the traceability. Theorem 1's bound sum_{i>m} lambda_i is where the eigenspectrum decay assumption becomes explicit \u2014 this is the critical verification.",
+      "confidence_level": 5,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    }
+  ],
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "interaction_id": 3,
+      "prompt": "How would I recognize whether a dataset has a fast-decaying or flat kernel matrix eigenspectrum? What quantitative criterion does the paper use?",
+      "why_important": "This was the most practically impactful prompt \u2014 it gave me the lambda_1/lambda_k diagnostic that I then used in Task 3.2 to quantitatively demonstrate the failure mode. It bridged Task 1.2 (assumption identification) with Task 3.2 (failure mode), creating the 'closed loop' required by the rubric."
+    },
+    {
+      "rank": 2,
+      "interaction_id": 1,
+      "prompt": "What are the method-specific assumptions embedded in Yang et al. NIPS 2012 that the theoretical guarantees depend on?",
+      "why_important": "Directly generated the three assumptions used in Task 1.2. The challenge was distinguishing method-specific assumptions from generic ML ones \u2014 this prompt's framing helped me identify what to look for."
+    },
+    {
+      "rank": 3,
+      "interaction_id": 5,
+      "prompt": "For each of the three assumptions, point to a specific equation/section in Yang et al. 2012 where it appears explicitly or implicitly",
+      "why_important": "Task 1.2 requires all assumptions to be traceable to the paper \u2014 this verification step ensured my assumptions would hold up to Part C questioning. It confirmed Section 3 Theorem 1 as the key reference for the eigenspectrum assumption."
+    },
+    {
+      "rank": 4,
+      "interaction_id": 2,
+      "prompt": "Give a concrete real-world dataset where the shift-invariance assumption required by RFF would be violated",
+      "why_important": "The violation scenario is explicitly required by the task rubric. The polynomial kernel on text data example is concrete and verifiable \u2014 it helped me write a specific rather than vague violation scenario."
+    },
+    {
+      "rank": 5,
+      "interaction_id": 4,
+      "prompt": "When would Nystrom's uniform landmark sampling fail because landmarks are not representative?",
+      "why_important": "Generated the class imbalance violation scenario for Assumption 3 \u2014 a realistic, concrete scenario that could actually be tested empirically if needed in Part C."
+    }
+  ],
+  "student_declaration": {
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task in Part B.",
+    "understanding_acknowledged": true,
+    "signature": "Manu Vahan",
+    "date": "2026-03-07"
+  }
+}
