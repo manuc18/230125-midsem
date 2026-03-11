@@ -1,0 +1,68 @@
+{
+  "student_metadata": {
+    "name": "Manu Vahan",
+    "roll_number": "230125",
+    "course": "Advanced Machine Learning",
+    "exam": "Mid-Semester Examination",
+    "part": "Part B"
+  },
+  "llm_tools_used": [
+    {
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "provider": "Anthropic"
+    }
+  ],
+  "full_llm_interaction_log": [
+    {
+      "interaction_id": 1,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.1",
+      "purpose": "Understanding the Nystr\u00f6m algorithm's step-by-step mechanism to write the method description",
+      "prompt": "Explain the Nystr\u00f6m method for kernel approximation step by step, referencing the specific equations in the Yang et al. NIPS 2012 paper",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Helped structure the step-by-step format; I verified each step against Sections 2.1 and 2.2 of the paper before writing the final description.",
+      "student_verification": "Checked each step against the paper's Equations 2, 3, 5, and 6. The eigendecomposition step (Eq. 6) and the RFF feature map (Eq. 3) were confirmed directly from the paper's formulas.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "N/A \u2014 no code in this task"
+    },
+    {
+      "interaction_id": 2,
+      "date": "2026-03-06",
+      "tool_name": "Claude",
+      "model": "Claude Sonnet 4.6",
+      "task_tag": "Task 1.1",
+      "purpose": "Understanding Bochner's theorem and its role in RFF derivation",
+      "prompt": "What is Bochner's theorem and why is it necessary for Random Fourier Features to work? Reference Section 2.1 of Yang et al. 2012",
+      "llm_response_used": "Partially",
+      "how_it_helped": "Clarified that Bochner's theorem provides the Fourier transform decomposition that justifies sampling frequencies from the spectral distribution.",
+      "student_verification": "Confirmed by reading Section 2 (Preliminaries) of the paper, which explicitly invokes Bochner's theorem and cites Rahimi & Recht 2007.",
+      "confidence_level": 4,
+      "code_used_verbatim": false,
+      "student_modification": "N/A"
+    }
+  ],
+  "top_5_prompts": [
+    {
+      "rank": 1,
+      "interaction_id": 1,
+      "prompt": "Explain the Nystr\u00f6m method for kernel approximation step by step, referencing the specific equations in the Yang et al. NIPS 2012 paper",
+      "why_important": "Core to Task 1.1 \u2014 understanding the step-by-step mechanism was the primary deliverable."
+    },
+    {
+      "rank": 2,
+      "interaction_id": 2,
+      "prompt": "What is Bochner's theorem and why is it necessary for Random Fourier Features to work?",
+      "why_important": "Bochner's theorem is the theoretical foundation of RFF; understanding it was essential to writing an accurate method description that references the paper rather than giving a generic SVM summary."
+    }
+  ],
+  "student_declaration": {
+    "statement": "I declare that this JSON file contains a complete and honest record of my LLM usage for this task.",
+    "understanding_acknowledged": true,
+    "signature": "Manu Vahan",
+    "date": "2026-03-06"
+  }
+}
